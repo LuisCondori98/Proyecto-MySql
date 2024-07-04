@@ -1,4 +1,4 @@
-Descripción de la Temática de la Base de Datos
+#Descripción de la Temática de la Base de Datos
 
 La base de datos "SteelEcht" está diseñada para gestionar una tienda de bicicletas. Incluye la gestión de categorías de productos, proveedores, inventario de bicicletas, pedidos de clientes, detalles de pedidos, empleados, y la relación entre estos elementos. Este sistema proporciona una forma organizada y eficiente de rastrear la información de la tienda, facilitando la toma de decisiones y el mantenimiento de la integridad de los datos.
 
