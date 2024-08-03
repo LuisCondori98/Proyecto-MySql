@@ -115,3 +115,90 @@ JOIN
     Categorias c ON b.CategoriaId = c.CategoriaId
 JOIN 
     Proveedores p ON b.ProveedorId = p.ProveedorId;
+```
+
+### 2. Vista: `VistaClientesPedidos`
+**Descripción**: Esta vista permite visualizar todos los pedidos realizados por cada cliente, incluyendo la fecha y el importe total.
+
+**Objetivo**: Facilitar el seguimiento de los pedidos realizados por cada cliente y analizar la actividad de compra.
+
+**Tablas que Componen**: `Clientes`, `Pedidos`
+
+```sql
+CREATE VIEW VistaClientesPedidos AS
+SELECT 
+    c.ClienteId,
+    c.Nombre,
+    c.Apellido,
+    p.FechaPedido,
+    p.ImporteTotal,
+    p.Estado
+FROM 
+    Clientes c
+JOIN 
+    Pedidos p ON c.ClienteId = p.ClienteId;
+```
+
+### 3. Vista: `VistaDetallesPedidos`
+**Descripción**: Muestra los detalles de cada pedido, incluyendo la bicicleta, cantidad y precio unitario.
+
+**Objetivo**: Permitir un análisis detallado de los pedidos, facilitando la gestión de inventario y ventas.
+
+**Tablas que Componen**: `DetallesPedidos`, `Bicicletas`, `Pedidos`
+
+```sql
+CREATE VIEW VistaDetallesPedidos AS
+SELECT 
+    dp.DetallePedidoID,
+    p.PedidoID,
+    b.Modelo,
+    dp.Cantidad,
+    dp.PrecioUnitario
+FROM 
+    DetallesPedidos dp
+JOIN 
+    Bicicletas b ON dp.BicicletaId = b.BicicletaId
+JOIN 
+    Pedidos p ON dp.PedidoId = p.PedidoID;
+```
+
+## Listado de Funciones
+
+### 1. Funcion: `CalcularTotalPedidos`
+**Descripción**: Calcula el importe total de todos los pedidos realizados por un cliente específico.
+
+**Objetivo**: Facilitar la obtención de datos financieros y evaluar el rendimiento de cada cliente.
+
+**Tablas Manipuladas**: `Pedidos`, `DetallesPedidos`
+
+```sql
+CREATE FUNCTION CalcularTotalPedidos(clienteId INT)
+RETURNS DECIMAL(10, 2)
+BEGIN
+    DECLARE total DECIMAL(10, 2);
+    SELECT SUM(ImporteTotal) INTO total
+    FROM Pedidos
+    WHERE ClienteId = clienteId;
+    RETURN total;
+END;
+```
+
+### 2. Funcion: `StockBicicleta`
+**Descripción**: Devuelve la cantidad de stock disponible para una bicicleta específica.
+
+**Objetivo**: Permitir verificar rápidamente la disponibilidad de un modelo de bicicleta.
+
+**Tablas Manipuladas**: `Bicicletas`, `Inventario`
+
+```sql
+CREATE FUNCTION StockBicicleta(bicicletaId INT)
+RETURNS INT
+BEGIN
+    DECLARE stock INT;
+    SELECT CantidadEnStock INTO stock
+    FROM Inventario
+    WHERE BicicletaId = bicicletaId;
+    RETURN stock;
+END;
+```
+
