@@ -202,3 +202,50 @@ BEGIN
 END;
 ```
 
+## Listado de Stored Procedures
+
+### 1. Procedimiento Almacenado: `AgregarPedido`
+**Descripción**: Permite agregar un nuevo pedido a la base de datos, registrando la información del cliente y del empleado que gestiona la venta.
+
+**Objetivo**: Facilitar la inserción de nuevos pedidos en el sistema de forma organizada.
+
+**Tablas Manipuladas**: `Pedidos`, `DetallesPedidos`
+
+```sql
+CREATE PROCEDURE AgregarPedido(
+    IN clienteId INT,
+    IN empleadoId INT,
+    IN fechaPedido DATE,
+    IN importeTotal DECIMAL(10, 2),
+    IN estado VARCHAR(50)
+)
+BEGIN
+    DECLARE nuevoPedidoId INT;
+
+    INSERT INTO Pedidos (ClienteId, EmpleadoId, FechaPedido, ImporteTotal, Estado)
+    VALUES (clienteId, empleadoId, fechaPedido, importeTotal, estado);
+
+    SET nuevoPedidoId = LAST_INSERT_ID();
+
+    -- Aquí puedes agregar la lógica para insertar detalles del pedido
+END;
+```
+
+### 2. Procedimiento Almacenado: `ActualizarStockBicicleta`
+**Descripción**: Actualiza la cantidad de stock de una bicicleta específica después de realizar un pedido.
+
+**Objetivo**: Mantener la información del inventario actualizada y precisa.
+
+**Tablas Manipuladas**: `Bicicletas`, `Inventario`
+
+```sql
+CREATE PROCEDURE ActualizarStockBicicleta(
+    IN bicicletaId INT,
+    IN cantidad INT
+)
+BEGIN
+    UPDATE Inventario
+    SET CantidadEnStock = CantidadEnStock - cantidad
+    WHERE BicicletaId = bicicletaId;
+END;
+```
