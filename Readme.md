@@ -89,3 +89,29 @@ A continuación se presenta un diagrama de entidad-relación (DER) que describe 
 | `Correo`        | Correo Electrónico    | `VARCHAR(100)` |                  |
 | `Telefono`      | Teléfono              | `VARCHAR(20)` |                  |
 | `Direccion`     | Dirección             | `VARCHAR(100)` |                  |
+
+## Listado de Vistas
+
+### 1. Vista: `VistaBicicletas`
+**Descripción**: Muestra un resumen de las bicicletas disponibles, incluyendo su categoría y proveedor.
+
+**Objetivo**: Permitir una consulta rápida de las bicicletas, su stock, y la información del proveedor y la categoría.
+
+**Tablas que Componen**: `Bicicletas`, `Categorias`, `Proveedores`
+
+```sql
+CREATE VIEW VistaBicicletas AS
+SELECT 
+    b.BicicletaId,
+    b.Modelo,
+    b.Marca,
+    b.Stock,
+    b.Descripcion,
+    c.NombreCategoria,
+    p.NombreProveedor
+FROM 
+    Bicicletas b
+JOIN 
+    Categorias c ON b.CategoriaId = c.CategoriaId
+JOIN 
+    Proveedores p ON b.ProveedorId = p.ProveedorId;
